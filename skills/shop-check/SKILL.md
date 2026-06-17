@@ -274,24 +274,24 @@ Häufige Problemmuster:
 
 ## Modus C — Textbausteine
 
-Generiert rechtskonforme deutsche Textbausteine für den Shop.
-Lade `references/shop-check-requirements.md` für Muster-Texte und Pflichtinhalte.
+Generiert rechtskonforme deutsche Textbausteine für den Shop. Alle Pflichtinhalte werden live via MCP abgerufen — keine statischen Templates.
 
 Unterstützte Typen:
 
-| Typ | Ausgabe |
-|---|---|
-| `widerrufsbelehrung` | Widerrufsbelehrung nach BGB-Muster (Waren) |
-| `widerrufsformular` | Muster-Widerrufsformular nach Anlage 2 zu § 356 BGB |
-| `impressum` | Impressum-Bausteine nach DDG § 5 |
-| `button-texte` | Vollständige Liste erlaubter Bestellbutton-Formulierungen nach BGH |
-| `agb-checkliste` | Checkliste AGB-Pflichtinhalte für B2C-Online-Shops |
+| Typ | MCP-Abfrage | Ausgabe |
+|---|---|---|
+| `widerrufsbelehrung` | `gesetz_per_abkuerzung_abrufen("EGBGB")` → Anlage 1 zu Art. 246a § 1 Abs. 2 | Widerrufsbelehrung nach amtlichem Muster (Waren) |
+| `widerrufsformular` | `gesetz_per_abkuerzung_abrufen("BGB")` → Anlage 2 zu § 356 | Muster-Widerrufsformular (amtlicher Text) |
+| `impressum` | `gesetz_per_abkuerzung_abrufen("DDG")` → § 5 | Impressum-Bausteine mit allen Pflichtangaben |
+| `button-texte` | `intelligente_rechtssuche("BGB § 312j Absatz 3 Bestellbutton zahlungspflichtig")` + `rechtsprechung_suchen("BGH I ZR 86/21 Button-Lösung")` | Erlaubte Formulierungen nach Gesetz + BGH |
+| `agb-checkliste` | `gesetz_per_abkuerzung_abrufen("BGB")` → §§ 305–309 | AGB-Einbeziehungspflichten und verbotene Klauseln |
 
 Ablauf für jeden Textbaustein:
-1. MCP-Lookup für aktuellen Gesetzestext (`intelligente_rechtssuche` oder `gesetz_per_abkuerzung_abrufen`)
-2. Pflichtinhalte aus dem Gesetzestext ableiten
-3. Textbaustein generieren — jeden Pflichtinhalt mit Inline-Kommentar und Rechtsgrundlage versehen
-4. Haftungsausschluss anhängen
+1. MCP-Abfrage ausführen (oben angegeben) — Gesetzestext live abrufen
+2. Pflichtinhalte direkt aus dem abgerufenen Text ableiten — nicht aus Trainingsdaten
+3. Textbaustein generieren — jeden Pflichtinhalt mit Inline-Kommentar und exakter Rechtsgrundlage aus dem MCP-Abruf versehen
+4. Falls MCP nicht verfügbar: explizit vermerken *(Gesetzestext aus Trainingsdaten — verifizieren auf gesetze-im-internet.de)*
+5. Haftungsausschluss anhängen
 
 Jeder generierte Text endet mit:
 > *Dieser Text wurde mit KI-Unterstützung auf Basis des geltenden deutschen Rechts erstellt. Lassen Sie wichtige Shoprechtstexte von einem zugelassenen Rechtsanwalt prüfen. Kein Ersatz für Rechtsberatung.*
@@ -314,8 +314,3 @@ Jeder generierte Text endet mit:
 - **Gesetzeszitate:** Immer direkt aus MCP-Abfrage. Falls nicht verfügbar: *(Gesetzestext aus Trainingsdaten — verifizieren auf gesetze-im-internet.de)*
 - **Haftungsausschluss:** Jeder Bericht endet mit — *Dieser Bericht dient der technischen Orientierung und ersetzt keine Rechtsberatung.*
 
----
-
-## Referenzmaterialien
-
-- **`references/shop-check-requirements.md`** — Erlaubte Button-Texte (BGH-Liste), Muster-Widerrufsbelehrung (Waren), Muster-Widerrufsformular (Anlage 2 § 356 BGB), PAngV-Checkliste, AGB-Pflichtinhalte, Impressum-Checkliste, bekannte Abmahnverbände
